@@ -31,13 +31,13 @@ def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     try:
-        img_data = base64.b64decode(req.base64Image)
-        image = Image.open(BytesIO(img_data)).convert("RGB")
+        img_data = base64.b64decode(req.base64Image, validate=True)
+        image = Image.open(BytesIO(img_data))
+        image = image.convert("RGB")
     except Exception as e:
-        raise HTTPException(status_code=400, detail="Invalid image data")
-
-    result = get_ocr().ocr(image, cls=True)
-    response = []
+        raise HTTPException(status_code=400, detail=f"Invalid image data: {str(e)}")
+        result = get_ocr().ocr(image, cls=True)
+        response = []
 
     for line in result[0]:
         text, confidence = line[1][0], line[1][1]
