@@ -6,12 +6,10 @@ from paddleocr import PaddleOCR
 from io import BytesIO
 from PIL import Image
 
-# Load API key from file
-API_KEY_FILE = "api_key.txt"
-if not os.path.exists(API_KEY_FILE):
-    raise RuntimeError("API key file not found. Please create 'api_key.txt' with your API key.")
-with open(API_KEY_FILE, "r") as f:
-    API_KEY = f.read().strip()
+# Load API key from environment variable
+API_KEY = os.getenv("API_KEY")
+if not API_KEY:
+    raise RuntimeError("API_KEY not set in environment.")
 
 # Init PaddleOCR (English only)
 ocr = None
