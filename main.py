@@ -14,8 +14,14 @@ with open(API_KEY_FILE, "r") as f:
     API_KEY = f.read().strip()
 
 # Init PaddleOCR (English only)
-ocr = PaddleOCR(use_angle_cls=True, lang='en')
+ocr = None
 
+def get_ocr():
+    global ocr
+    if ocr is None:
+        from paddleocr import PaddleOCR
+        ocr = PaddleOCR(use_angle_cls=True, lang='en')
+    return ocr
 app = FastAPI()
 
 class OCRRequest(BaseModel):
@@ -32,7 +38,7 @@ def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail="Invalid image data")
 
-    result = ocr.ocr(image, cls=True)
+    result = get_ocr().ocr(image, cls=True)
     response = []
 
     for line in result[0]:
