@@ -5,7 +5,7 @@ from pydantic import BaseModel
 from paddleocr import PaddleOCR
 from io import BytesIO
 from PIL import Image
-
+import numpy as np
 # Load API key from environment variable
 API_KEY = os.getenv("API_KEY")
 if not API_KEY:
@@ -37,6 +37,7 @@ def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
         padded_b64 = fix_base64_padding(req.base64Image)
         img_data = base64.b64decode(padded_b64)
         image = Image.open(BytesIO(img_data)).convert("RGB")
+        image = np.array(image)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid image data: {str(e)}")
 
