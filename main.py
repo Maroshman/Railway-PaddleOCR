@@ -23,6 +23,10 @@ def get_ocr():
             lang='en',
             rec_model_dir='models/latin_PP-OCRv5_mobile_rec_infer'
         )
+        # ✅ Debug prints to confirm actual models being used
+        print("🔍 Detection model:", ocr.det_model.det_model)
+        print("🔍 Recognition model:", ocr.rec_model.rec_model)
+        print("🔍 Classifier model:", ocr.cls_model.cls_model)
     return ocr
 app = FastAPI()
 
