@@ -7,6 +7,14 @@ WORKDIR /app
 # Upgrade pip early
 RUN pip install --no-cache-dir --upgrade pip
 
+# --- Download PaddleOCR v5 model if not already present ---
+RUN mkdir -p /app/models/latin_PP-OCRv5_rec_infer && \
+    if [ ! -f /app/models/latin_PP-OCRv5_rec_infer/inference.pdmodel ]; then \
+        curl -L https://paddle-model-ecology.bj.bcebos.com/paddlex/official_inference_model/paddle3.0.0//PP-OCRv5_server_rec_infer.tar -o /app/models/PP-OCRv5_server_rec_infer.tar && \
+        tar -xf /app/models/PP-OCRv5_server_rec_infer.tar -C /app/models/PP-OCRv5_server_rec_infer && \
+        rm /app/models/PP-OCRv5_server_rec_infer.tar; \
+    fi
+
 # Install system dependencies with retry-safe apt install
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \

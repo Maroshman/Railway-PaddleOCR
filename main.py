@@ -20,8 +20,8 @@ def get_ocr():
         from paddleocr import PaddleOCR
         ocr = PaddleOCR(
             use_angle_cls=True,
-            # lang='en',
-            rec_model_dir='models/latin_PP-OCRv5_mobile_rec_infer'
+            lang='en',
+            rec_model_dir='models/PP-OCRv5_server_rec_infer'
         )
     return ocr
 app = FastAPI()
