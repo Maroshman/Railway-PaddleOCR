@@ -15,11 +15,11 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     && rm -rf /var/lib/apt/lists/*
 
 # Download PaddleOCR v5 model if not already present
-RUN mkdir -p /app/models/latin_PP-OCRv5_rec_infer && \
-    if [ ! -f /app/models/latin_PP-OCRv5_rec_infer/inference.pdmodel ]; then \
-        curl -L https://paddleocr.bj.bcebos.com/PP-OCRv5/rec/latin_PP-OCRv5_rec_infer.tar -o /app/models/latin_PP-OCRv5_rec_infer.tar && \
-        tar -xf /app/models/latin_PP-OCRv5_rec_infer.tar -C /app/models/latin_PP-OCRv5_rec_infer && \
-        rm /app/models/latin_PP-OCRv5_rec_infer.tar; \
+RUN mkdir -p /app/models/PP-OCRv5_mobile_rec_infer && \
+    if [ ! -f /app/models/PP-OCRv5_mobile_rec_infer/inference.pdiparams ]; then \
+        curl -L https://paddle-model-ecology.bj.bcebos.com/paddlex/official_inference_model/paddle3.0.0//PP-OCRv5_mobile_rec_infer.tar -o /app/models/PP-OCRv5_mobile_rec_infer.tar && \
+        tar -xf /app/models/PP-OCRv5_mobile_rec_infer.tar -C /app/models/PP-OCRv5_mobile_rec_infer && \
+        rm /app/models/PP-OCRv5_mobile_rec_infer.tar; \
     fi
 
 # Install system dependencies with retry-safe apt install
