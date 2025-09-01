@@ -1,6 +1,7 @@
 import base64
 import os
 from fastapi import FastAPI, HTTPException, Header
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from paddleocr import PaddleOCR
 from io import BytesIO
@@ -24,7 +25,17 @@ def get_ocr():
             rec_model_dir='models/PP-OCRv5_mobile_rec_infer'
         )
     return ocr
+
 app = FastAPI()
+
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
 
 class OCRRequest(BaseModel):
     base64Image: str
