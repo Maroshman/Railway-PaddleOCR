@@ -38,8 +38,8 @@ RUN pip install --no-cache-dir numpy==1.23.5
 # Install all remaining dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Expose port
-EXPOSE 8080
+# Expose the default port used by most platforms (Railway uses 8000, Cloud Run uses 8080)
+EXPOSE 8000
 
-# Run server
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+# Make it dynamic based on environment
+CMD ["sh", "-c", "uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"]
