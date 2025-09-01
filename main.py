@@ -46,6 +46,13 @@ def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
         raise HTTPException(status_code=401, detail="Unauthorized")
 
     def fix_base64_padding(b64_string):
+        # Strip data URL prefix if present (e.g., "data:image/jpeg;base64,")
+        if b64_string.startswith('data:image/'):
+            # Find the comma that separates the data URL from the base64 data
+            comma_index = b64_string.find(',')
+            if comma_index != -1:
+                b64_string = b64_string[comma_index + 1:]
+        
         return b64_string + '=' * (-len(b64_string) % 4)
 
     try:
