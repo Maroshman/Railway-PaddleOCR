@@ -40,6 +40,11 @@ app.add_middleware(
 class OCRRequest(BaseModel):
     base64Image: str
 
+@app.get("/health")
+def health():
+    # Lightweight health check endpoint to keep the service warm
+    return {"status": "OK"}
+
 @app.post("/ocr")
 def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
     if x_api_key != API_KEY:
