@@ -63,16 +63,29 @@ def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"Invalid image data: {str(e)}")
 
-    # 🧠 OCR runs only if image decoding succeeds
-    result = get_ocr().ocr(image, cls=True)
-    response = []
-
-    for line in result[0]:
-        text, confidence = line[1][0], line[1][1]
-        response.append({
-            "text": text,
-            "confidence": round(float(confidence), 4)
-        })
-
-    return {"results": response}
+    try:
+        # 🧠 OCR runs only if image decoding succeeds
+        result = get_ocr().ocr(image, cls=True)
+        
+        # Handle cases where no text is detected (return empty results instead of error)
+        if result is None or len(result) == 0 or result[0] is None:
+            return {"text_blocks": []}
+        
+        response = []
+        for line in result[0]:
+            # Check if line has valid structure before processing
+            if line and len(line) >= 2 and line[1] and len(line[1]) >= 2:
+                text, confidence = line[1][0], line[1][1]
+                response.append({
+                    "text": text,
+                    "confidence": round(float(confidence), 4)
+                })
+        
+        return {"text_blocks": response}
+        
+    except Exception as e:
+        # Log the error for debugging but still return empty results
+        print(f"OCR processing error: {str(e)}")
+        # Return empty results instead of 500 error
+        return {"text_blocks": []}
 
