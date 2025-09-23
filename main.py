@@ -69,7 +69,7 @@ def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
         
         # Handle cases where no text is detected (return empty results instead of error)
         if result is None or len(result) == 0 or result[0] is None:
-            return {"text_blocks": []}
+            return {"results": []}
         
         response = []
         for line in result[0]:
@@ -81,11 +81,11 @@ def ocr_image(req: OCRRequest, x_api_key: str = Header(...)):
                     "confidence": round(float(confidence), 4)
                 })
         
-        return {"text_blocks": response}
+        return {"results": response}
         
     except Exception as e:
         # Log the error for debugging but still return empty results
         print(f"OCR processing error: {str(e)}")
         # Return empty results instead of 500 error
-        return {"text_blocks": []}
+        return {"results": []}
 
